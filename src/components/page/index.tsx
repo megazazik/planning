@@ -1,10 +1,11 @@
 import * as React from 'react';
 import Task from '../task';
 import TastList from '../taskList';
+import SubTastList from '../subTaskList';
+import SubTask from '../subTask';
 import { connect } from 'react-redux';
 import { reducer, actions } from '../../app/page';
 import { createDispatchToProps } from '../../modules/dispatchToProps';
-import { ModelActions } from '../../modules/model';
 import { bindActionCreators, Dispatch } from 'redux';
 
 const ConnectedTask = connect(
@@ -12,44 +13,49 @@ const ConnectedTask = connect(
 	(dispatch: Dispatch, props: {task: string}) => bindActionCreators(actions.tasks.item(props.task), dispatch)
 )(Task);
 
-const ConnectedAddButton = connect(
-	(_) => ({}),
-	createDispatchToProps(actions)
-)((props: any) => (
-	<button
-		type="button"
-		className="btn btn-primary mr-2"
-		onClick={props.createTask}
-	>
-		Добавить
-	</button>
-));
-
-const ConnectedRemoveButton = connect(
-	(_) => ({}),
-	createDispatchToProps(actions.tasks)
-)((props: ModelActions<typeof import('../../app/taskList')['default']> & {task: string}) => (
-	<button
-		type="button"
-		className="btn btn-primary"
-		onClick={() => props.remove(props.task)}
-		disabled={!props.task}
-	>
-		Удалить
-	</button>
-));
-
 const ConnectedTaskList = connect(
 	(state: ReturnType<typeof reducer>) => state.tasks,
+	createDispatchToProps(actions.tasks)
 )(TastList);
 
-export default class Page extends React.Component<any, {task: string}> {
+const ConnecteSubTastList = connect(
+	(state: ReturnType<typeof reducer>, props: {taskId: string}) => ({
+		...state.subTasks,
+		items: Object.keys(state.subTasks.items).reduce(
+			(newTasks, subTaskId) => state.subTasks.items[subTaskId].taskId !== props.taskId
+				? newTasks
+				: {
+					...newTasks,
+					[subTaskId]: state.subTasks.items[subTaskId],
+				},
+			{}
+		)
+	}),
+	createDispatchToProps(actions.subTasks)
+)(SubTastList);
+
+const ConnectedSubTask = connect(
+	(state: ReturnType<typeof reducer>, props: {subTask: string}) => state.subTasks.items[props.subTask] || {title: undefined, id: undefined, taskId: undefined},
+	(dispatch: Dispatch, props: {subTask: string}) => bindActionCreators(actions.subTasks.item(props.subTask), dispatch)
+)(SubTask);
+
+interface IState {
+	task: string;
+	subTask: string;
+}
+
+export default class Page extends React.Component<{}, IState> {
 	state = {
-		task: ''
+		task: '',
+		subTask: ''
 	}
 
 	private _setTask = (task: string) => {
-		this.setState({task});
+		this.setState({task, subTask: ''});
+	}
+
+	private _setSubTask = (subTask: string) => {
+		this.setState({subTask});
 	}
 
 	render() {
@@ -59,9 +65,6 @@ export default class Page extends React.Component<any, {task: string}> {
 					<h1>Планирование спринта</h1>
 					<h2>Задачи</h2>
 					<div className='row my-3'>
-						<div className='col'><ConnectedAddButton/><ConnectedRemoveButton task={this.state.task}/></div>
-					</div>
-					<div className='row my-3'>
 						<div className='col col-md-6'>
 							<ConnectedTaskList
 								onTaskSelect={this._setTask}
@@ -70,6 +73,12 @@ export default class Page extends React.Component<any, {task: string}> {
 						</div>
 						<div className='col col-md-6'>
 							<ConnectedTask task={this.state.task}/>
+							<ConnecteSubTastList
+								onSubTaskSelect={this._setSubTask}
+								selectedSubTaskId={this.state.subTask}
+								taskId={this.state.task}
+							/>
+							<ConnectedSubTask subTask={this.state.subTask}/>
 						</div>
 					</div>
 				</div>

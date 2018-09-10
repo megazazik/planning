@@ -16,8 +16,8 @@ export default class Task extends React.PureComponent<Props> {
 		return (
 			<form>
 				<div className="form-group row">
-					<label className="col-xl-2 col-form-label">Id</label>
-					<div className="col-xl-10">
+					<label className="col-4 col-form-label">Id</label>
+					<div className="col-8">
 						<input
 							type="text"
 							className="form-control"
@@ -28,8 +28,8 @@ export default class Task extends React.PureComponent<Props> {
 					</div>
 				</div>
 				<div className="form-group row">
-					<label className="col-xl-2 col-form-label">Заголовок</label>
-					<div className="col-xl-10">
+					<label className="col-4 col-form-label">Заголовок</label>
+					<div className="col-8">
 						<input
 							type="text"
 							className="form-control"
