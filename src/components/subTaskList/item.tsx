@@ -16,7 +16,7 @@ export default class TaskListItem extends React.PureComponent<Props> {
 				<td>{this.props.id}</td>
 				<td>{this.props.title}</td>
 				<td>{this.props.start}</td>
-				<td>{this.props.end}</td>
+				<td>{this.props.duration}</td>
 			</tr>
 		);
 	}

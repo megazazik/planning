@@ -4,7 +4,7 @@ export interface ISubTask {
 	id: string;
 	title: string;
 	start?: number;
-	end?: number;
+	duration?: number;
 	taskId: string;
 }
 
@@ -20,12 +20,10 @@ const model = build()
 		setStart: (task, action: IAction<number>) => ({
 			...task, 
 			start: action.payload,
-			end: Math.max(action.payload, task.end),
 		}),
-		setEnd: (task, action: IAction<number>) => ({
+		setDuration: (task, action: IAction<number>) => ({
 			...task,
-			end: action.payload,
-			start: Math.min(action.payload, task.start)
+			duration: action.payload,
 		}),
 	});
 

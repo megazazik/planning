@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { reducer, actions } from '../../app/page';
 import { createDispatchToProps } from '../../modules/dispatchToProps';
 import { bindActionCreators, Dispatch } from 'redux';
+import TaskGraph from '../taskGraph';
 
 const ConnectedTask = connect(
 	(state: ReturnType<typeof reducer>, props: {task: string}) => state.tasks.items[props.task] || {title: undefined, id: undefined},
@@ -38,6 +39,10 @@ const ConnectedSubTask = connect(
 	(state: ReturnType<typeof reducer>, props: {subTask: string}) => state.subTasks.items[props.subTask] || {title: undefined, id: undefined, taskId: undefined},
 	(dispatch: Dispatch, props: {subTask: string}) => bindActionCreators(actions.subTasks.item(props.subTask), dispatch)
 )(SubTask);
+
+const ConnectedTaskGraph = connect(
+	(state: ReturnType<typeof reducer>) => ({tasks: state.tasks.items, subTasks: state.subTasks.items})
+)(TaskGraph);
 
 interface IState {
 	task: string;
@@ -81,6 +86,7 @@ export default class Page extends React.Component<{}, IState> {
 							<ConnectedSubTask subTask={this.state.subTask}/>
 						</div>
 					</div>
+					<ConnectedTaskGraph />
 				</div>
 			</>
 		);

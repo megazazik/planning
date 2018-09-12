@@ -17,7 +17,7 @@ export default class Task extends React.PureComponent<Props> {
 	}
 
 	private _onDurationChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
-		this.props.setEnd(+event.target.value);
+		this.props.setDuration(+event.target.value);
 	}
 
 	render() {
@@ -50,7 +50,7 @@ export default class Task extends React.PureComponent<Props> {
 						<input
 							type="text"
 							className="form-control"
-							value={this.props.end || ''}
+							value={this.props.duration || ''}
 							onChange={this._onDurationChanged}
 							disabled={disabled}
 							placeholder="Продолжительность"
