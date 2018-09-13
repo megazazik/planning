@@ -2,13 +2,21 @@ import * as React from 'react';
 import { ModelState } from '../../modules/model';
 import { ISubTask } from '../../app/subTask';
 import styles from './styles.less';
+import cached from 'react-cached-callback';
 
 export type Props = {
 	subTasks: {[id: string]: ModelState<typeof import('../../app/subTask')['default']>};
 	task: ModelState<typeof import('../../app/task')['default']>;
+	onSelectTask?: () => void;
+	onSelectSubTask?: (subTaskId: string) => void;
 }
 
 export default class TaskGraphItem extends React.PureComponent<Props> {
+	static defaultProps = {
+		onSelectTask() {},
+		onSelectSubTask() {}
+	}
+
 	private _getLines() {
 		const lines: ISubTask[][] = [[]];
 		Object.keys(this.props.subTasks).forEach((subTaskId) => {
@@ -30,13 +38,25 @@ export default class TaskGraphItem extends React.PureComponent<Props> {
 		return lines;
 	}
 
+	private _getSubTaskId(subTask: ISubTask) {
+		return Object.keys(this.props.subTasks).find((subTaskId) => this.props.subTasks[subTaskId] === subTask);
+	}
+
+	@cached
+	private _onSelectSubTask(subTaskId: string) {
+		return () => this.props.onSelectSubTask(subTaskId);
+	}
+
 	render() {
 		if (!this.props.task) {	
 			return null;
 		}
 
 		return (
-			<div className="row align-items-center mb-3">
+			<div
+				className={`row align-items-center mb-3 ${styles.task}`}
+				onClick={this.props.onSelectTask}
+			>
 				<div className="col-md-1">{this.props.task.id}</div>
 				<div className="col-md-11">
 					{this._getLines().map((line, index) => {
@@ -47,7 +67,11 @@ export default class TaskGraphItem extends React.PureComponent<Props> {
 									const offset = subTask.start - prevEnd - 1;
 									prevEnd = subTask.start + subTask.duration - 1;
 									return (
-										<div className={`col-${subTask.duration} offset-${offset} ${styles.item}`}>
+										<div
+											className={`col-${subTask.duration} offset-${offset} ${styles.item}`}
+											onClick={this._onSelectSubTask(this._getSubTaskId(subTask))}
+											key={`subTask${this._getSubTaskId(subTask)}`}
+										>
 											{subTask.id}: {subTask.start} - {subTask.duration}
 										</div>
 									);

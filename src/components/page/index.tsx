@@ -8,6 +8,7 @@ import { reducer, actions } from '../../app/page';
 import { createDispatchToProps } from '../../modules/dispatchToProps';
 import { bindActionCreators, Dispatch } from 'redux';
 import TaskGraph from '../taskGraph';
+import { ModelState } from '../../modules/model';
 
 const ConnectedTask = connect(
 	(state: ReturnType<typeof reducer>, props: {task: string}) => state.tasks.items[props.task] || {title: undefined, id: undefined},
@@ -44,23 +45,37 @@ const ConnectedTaskGraph = connect(
 	(state: ReturnType<typeof reducer>) => ({tasks: state.tasks.items, subTasks: state.subTasks.items})
 )(TaskGraph);
 
+interface IProps {
+	subTasks: ModelState<typeof import('../../app/subTaskList')['default']>;
+}
+
 interface IState {
 	task: string;
 	subTask: string;
 }
 
-export default class Page extends React.Component<{}, IState> {
+class Page extends React.Component<IProps, IState> {
 	state = {
 		task: '',
 		subTask: ''
 	}
 
 	private _setTask = (task: string) => {
-		this.setState({task, subTask: ''});
+		this.setState((state) => {
+			if (state.subTask && this.props.subTasks.items[state.subTask].taskId !== task) {
+				return {task, subTask: ''};
+			} else {
+				return {task, subTask: state.subTask};
+			}
+		});
 	}
 
 	private _setSubTask = (subTask: string) => {
-		this.setState({subTask});
+		if (subTask) {
+			this.setState({subTask, task: this.props.subTasks.items[subTask].taskId});
+		} else {
+			this.setState({subTask});
+		}
 	}
 
 	render() {
@@ -86,9 +101,16 @@ export default class Page extends React.Component<{}, IState> {
 							<ConnectedSubTask subTask={this.state.subTask}/>
 						</div>
 					</div>
-					<ConnectedTaskGraph />
+					<ConnectedTaskGraph
+						onSelectTask={this._setTask}
+						onSelectSubTask={this._setSubTask}
+					/>
 				</div>
 			</>
 		);
 	}
 }
+
+export default connect(
+	(state: ReturnType<typeof reducer>) => ({subTasks: state.subTasks})
+)(Page)
