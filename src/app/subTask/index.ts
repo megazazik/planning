@@ -6,6 +6,7 @@ export interface ISubTask {
 	start?: number;
 	duration?: number;
 	taskId: string;
+	personId?: string;
 }
 
 const model = build()
@@ -24,6 +25,10 @@ const model = build()
 		setDuration: (task, action: IAction<number>) => ({
 			...task,
 			duration: action.payload,
+		}),
+		setPerson: (task, action: IAction<string>) => ({
+			...task,
+			personId: action.payload,
 		}),
 	});
 

@@ -10,10 +10,11 @@ export type Props = {
 	tasks: {[id: string]: ModelState<typeof import('../../app/task')['default']>};
 	onSelectTask?: (taskId: string) => void;
 	onSelectSubTask?: (subTaskId: string) => void;
+	people: {[id: string]: ModelState<typeof import('../../app/person')['default']>};
 }
 
 export default class TaskGraph extends React.Component<Props> {
-	static defaultProps = {
+	static defaultProps: Partial<Props> = {
 		onSelectTask() {},
 		onSelectSubTask() {}
 	}
@@ -43,6 +44,7 @@ export default class TaskGraph extends React.Component<Props> {
 						subTasks={filter(this.props.subTasks, (subTask) => subTask.taskId === taskId)}
 						onSelectSubTask={this.props.onSelectSubTask}
 						onSelectTask={this._onSelectTask(taskId)}
+						people={this.props.people}
 					/>
 				))}
 			</>

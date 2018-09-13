@@ -1,5 +1,6 @@
 import { createMap, IAction } from 'encaps';
 import subTask from '../subTask';
+import { filter } from './filter';
 
 const subTasksBase = createMap(subTask);
 const subTasks = subTasksBase
@@ -27,7 +28,24 @@ const subTasks = subTasksBase
 					{}
 				)
 			};
-		}
+		},
+		cleanPerson(subTasks, action: IAction<string>) {
+			return {
+				...subTasks,
+				items: Object.keys(subTasks.items).reduce(
+					(newTasks, subTaskId) => ({
+						...newTasks,
+						[subTaskId]: subTasks.items[subTaskId].personId === action.payload
+							? {
+								...subTasks.items[subTaskId],
+								personId: null
+							}
+							: subTasks.items[subTaskId],	
+					}),
+					{}
+				)
+			};
+		},
 	});
 
 export default subTasks;

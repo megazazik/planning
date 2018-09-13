@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ViewProps } from '../../modules/model';
+import { ViewProps, ModelState } from '../../modules/model';
 import Item from './item';
 import cached from 'react-cached-callback';
 import cn from 'classnames';
@@ -9,6 +9,7 @@ export type Props = ViewProps<typeof import('../../app/subTaskList')['default']>
 	selectedSubTaskId: string;
 	taskId: string;
 	onSubTaskSelect: (subTask: string) => void;
+	people: ModelState<typeof import('../../app/people')['default']>
 };
 
 export default class SubTaskList extends React.PureComponent<Props> {
@@ -52,6 +53,7 @@ export default class SubTaskList extends React.PureComponent<Props> {
 									<th scope="col">Title</th>
 									<th scope="col">Start</th>
 									<th scope="col">Duration</th>
+									<th scope="col">Person</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -61,6 +63,7 @@ export default class SubTaskList extends React.PureComponent<Props> {
 										{...this.props.items[uid]}
 										className={cn(styles.row, {['table-info']: this.props.selectedSubTaskId === uid})}
 										onClick={this._onClick(uid)}
+										personName={(this.props.people.items[this.props.items[uid].personId] || {name: undefined}).name}
 									/>
 								))}
 							</tbody>

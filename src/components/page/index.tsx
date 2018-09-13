@@ -3,6 +3,8 @@ import Task from '../task';
 import TastList from '../taskList';
 import SubTastList from '../subTaskList';
 import SubTask from '../subTask';
+import People from '../people';
+import Person from '../person';
 import { connect } from 'react-redux';
 import { reducer, actions } from '../../app/page';
 import { createDispatchToProps } from '../../modules/dispatchToProps';
@@ -31,19 +33,40 @@ const ConnecteSubTastList = connect(
 					[subTaskId]: state.subTasks.items[subTaskId],
 				},
 			{}
-		)
+		),
+		people: state.people
 	}),
 	createDispatchToProps(actions.subTasks)
 )(SubTastList);
 
 const ConnectedSubTask = connect(
-	(state: ReturnType<typeof reducer>, props: {subTask: string}) => state.subTasks.items[props.subTask] || {title: undefined, id: undefined, taskId: undefined},
+	(state: ReturnType<typeof reducer>, props: {subTask: string}) => ({
+		...state.subTasks.items[props.subTask] || {title: undefined, id: undefined, taskId: undefined},
+		people: state.people
+	}),
 	(dispatch: Dispatch, props: {subTask: string}) => bindActionCreators(actions.subTasks.item(props.subTask), dispatch)
 )(SubTask);
 
 const ConnectedTaskGraph = connect(
-	(state: ReturnType<typeof reducer>) => ({tasks: state.tasks.items, subTasks: state.subTasks.items})
+	(state: ReturnType<typeof reducer>) => ({
+		tasks: state.tasks.items,
+		subTasks: state.subTasks.items,
+		people: state.people.items
+	})
 )(TaskGraph);
+
+const ConnectedPerson = connect(
+	(state: ReturnType<typeof reducer>, props: {person: string}) => ({
+		...state.people.items[props.person] || {name: undefined},
+		enabled: !!state.people.items[props.person]
+	}),
+	(dispatch: Dispatch, props: {person: string}) => bindActionCreators(actions.people.item(props.person), dispatch)
+)(Person);
+
+const ConnectedPeople = connect(
+	(state: ReturnType<typeof reducer>) => state.people,
+	createDispatchToProps(actions.people)
+)(People);
 
 interface IProps {
 	subTasks: ModelState<typeof import('../../app/subTaskList')['default']>;
@@ -52,12 +75,14 @@ interface IProps {
 interface IState {
 	task: string;
 	subTask: string;
+	person: string;
 }
 
 class Page extends React.Component<IProps, IState> {
 	state = {
 		task: '',
-		subTask: ''
+		subTask: '',
+		person: '',
 	}
 
 	private _setTask = (task: string) => {
@@ -77,6 +102,8 @@ class Page extends React.Component<IProps, IState> {
 			this.setState({subTask});
 		}
 	}
+
+	private _setPerson = (person: string) => this.setState({person});
 
 	render() {
 		return (
@@ -105,6 +132,12 @@ class Page extends React.Component<IProps, IState> {
 						onSelectTask={this._setTask}
 						onSelectSubTask={this._setSubTask}
 					/>
+					<h2>Люди</h2>
+					<ConnectedPeople
+						onPeopleSelect={this._setPerson}
+						selectedPerson={this.state.person}
+					/>
+					<ConnectedPerson person={this.state.person} />
 				</div>
 			</>
 		);

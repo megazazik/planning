@@ -9,6 +9,7 @@ export type Props = {
 	task: ModelState<typeof import('../../app/task')['default']>;
 	onSelectTask?: () => void;
 	onSelectSubTask?: (subTaskId: string) => void;
+	people: {[id: string]: ModelState<typeof import('../../app/person')['default']>};
 }
 
 export default class TaskGraphItem extends React.PureComponent<Props> {
@@ -72,7 +73,7 @@ export default class TaskGraphItem extends React.PureComponent<Props> {
 											onClick={this._onSelectSubTask(this._getSubTaskId(subTask))}
 											key={`subTask${this._getSubTaskId(subTask)}`}
 										>
-											{subTask.id}: {subTask.start} - {subTask.duration}
+											{subTask.id}: {(this.props.people[subTask.personId] || {name: undefined}).name}
 										</div>
 									);
 								})}

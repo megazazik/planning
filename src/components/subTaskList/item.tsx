@@ -4,6 +4,7 @@ import { ModelState } from '../../modules/model';
 export type Props = ModelState<typeof import('../../app/subTask')['default']> & {
 	onClick?: () => void;	
 	className?: string;
+	personName?: string;
 };
 
 export default class TaskListItem extends React.PureComponent<Props> {
@@ -17,6 +18,7 @@ export default class TaskListItem extends React.PureComponent<Props> {
 				<td>{this.props.title}</td>
 				<td>{this.props.start}</td>
 				<td>{this.props.duration}</td>
+				<td>{this.props.personName}</td>
 			</tr>
 		);
 	}
