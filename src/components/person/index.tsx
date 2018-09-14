@@ -1,31 +1,14 @@
-import * as React from 'react';
-import { ViewProps } from '../../modules/model';
+import { connect } from 'react-redux';
+import { reducer, actions } from '../../app/page';
+import Person from './view';
+import { bindActionCreators, Dispatch } from 'redux';
 
-export type Props = ViewProps<typeof import('../../app/person')['default']> & {
-	enabled: boolean;
-};
+const ConnectedPerson = connect(
+	(state: ReturnType<typeof reducer>, props: {person: string}) => ({
+		...state.people.items[props.person] || {name: undefined},
+		enabled: !!state.people.items[props.person]
+	}),
+	(dispatch: Dispatch, props: {person: string}) => bindActionCreators(actions.people.item(props.person), dispatch)
+)(Person);
 
-export default class Person extends React.PureComponent<Props> {
-	private _onNameChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
-		this.props.setName(event.target.value);
-	}
-
-	render() {
-		return (
-			<form>
-				<div className="form-group row">
-					<label className="col-2 col-form-label">Id</label>
-					<div className="col-10">
-						<input
-							type="text"
-							className="form-control"
-							value={this.props.name || ''}
-							onChange={this._onNameChanged}
-							disabled={!this.props.enabled}
-						/>
-					</div>
-				</div>
-			</form>
-		);
-	}
-}
+export default ConnectedPerson;

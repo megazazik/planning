@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Task from '../task';
-import TastList from '../taskList';
+import TaskList from '../taskList';
 import SubTastList from '../subTaskList';
 import SubTask from '../subTask';
 import People from '../people';
@@ -8,73 +8,8 @@ import Person from '../person';
 import TaskGraph from '../taskGraph';
 import PeopleGraph from '../peopleGraph';
 import { connect } from 'react-redux';
-import { reducer, actions } from '../../app/page';
-import { createDispatchToProps } from '../../modules/dispatchToProps';
-import { bindActionCreators, Dispatch } from 'redux';
+import { reducer } from '../../app/page';
 import { ModelState } from '../../modules/model';
-
-const ConnectedTask = connect(
-	(state: ReturnType<typeof reducer>, props: {task: string}) => state.tasks.items[props.task] || {title: undefined, id: undefined},
-	(dispatch: Dispatch, props: {task: string}) => bindActionCreators(actions.tasks.item(props.task), dispatch)
-)(Task);
-
-const ConnectedTaskList = connect(
-	(state: ReturnType<typeof reducer>) => state.tasks,
-	createDispatchToProps(actions.tasks)
-)(TastList);
-
-const ConnecteSubTastList = connect(
-	(state: ReturnType<typeof reducer>, props: {taskId: string}) => ({
-		...state.subTasks,
-		items: Object.keys(state.subTasks.items).reduce(
-			(newTasks, subTaskId) => state.subTasks.items[subTaskId].taskId !== props.taskId
-				? newTasks
-				: {
-					...newTasks,
-					[subTaskId]: state.subTasks.items[subTaskId],
-				},
-			{}
-		),
-		people: state.people
-	}),
-	createDispatchToProps(actions.subTasks)
-)(SubTastList);
-
-const ConnectedSubTask = connect(
-	(state: ReturnType<typeof reducer>, props: {subTask: string}) => ({
-		...state.subTasks.items[props.subTask] || {title: undefined, id: undefined, taskId: undefined},
-		people: state.people
-	}),
-	(dispatch: Dispatch, props: {subTask: string}) => bindActionCreators(actions.subTasks.item(props.subTask), dispatch)
-)(SubTask);
-
-const ConnectedTaskGraph = connect(
-	(state: ReturnType<typeof reducer>) => ({
-		tasks: state.tasks.items,
-		subTasks: state.subTasks.items,
-		people: state.people.items
-	})
-)(TaskGraph);
-
-const ConnectedPerson = connect(
-	(state: ReturnType<typeof reducer>, props: {person: string}) => ({
-		...state.people.items[props.person] || {name: undefined},
-		enabled: !!state.people.items[props.person]
-	}),
-	(dispatch: Dispatch, props: {person: string}) => bindActionCreators(actions.people.item(props.person), dispatch)
-)(Person);
-
-const ConnectedPeople = connect(
-	(state: ReturnType<typeof reducer>) => state.people,
-	createDispatchToProps(actions.people)
-)(People);
-
-const ConnectedPeopleGraph = connect(
-	(state: ReturnType<typeof reducer>) => ({
-		subTasks: state.subTasks.items,
-		people: state.people.items
-	})
-)(PeopleGraph);
 
 interface IProps {
 	subTasks: ModelState<typeof import('../../app/subTaskList')['default']>;
@@ -121,35 +56,35 @@ class Page extends React.Component<IProps, IState> {
 					<h2>Задачи</h2>
 					<div className='row my-3'>
 						<div className='col col-md-6'>
-							<ConnectedTaskList
+							<TaskList
 								onTaskSelect={this._setTask}
 								selectedTask={this.state.task}
 							/>
 						</div>
 						<div className='col col-md-6'>
-							<ConnectedTask task={this.state.task}/>
-							<ConnecteSubTastList
+							<Task task={this.state.task}/>
+							<SubTastList
 								onSubTaskSelect={this._setSubTask}
 								selectedSubTaskId={this.state.subTask}
 								taskId={this.state.task}
 							/>
-							<ConnectedSubTask subTask={this.state.subTask}/>
+							<SubTask subTask={this.state.subTask}/>
 						</div>
 					</div>
-					<ConnectedTaskGraph
+					<TaskGraph
 						onSelectTask={this._setTask}
 						onSelectSubTask={this._setSubTask}
 					/>
-					<ConnectedPeopleGraph
+					<PeopleGraph
 						onSelectPerson={this._setPerson}
 						onSelectSubTask={this._setSubTask}
 					/>
 					<h2>Люди</h2>
-					<ConnectedPeople
+					<People
 						onPeopleSelect={this._setPerson}
 						selectedPerson={this.state.person}
 					/>
-					<ConnectedPerson person={this.state.person} />
+					<Person person={this.state.person} />
 				</div>
 			</>
 		);
