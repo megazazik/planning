@@ -5,11 +5,12 @@ import SubTastList from '../subTaskList';
 import SubTask from '../subTask';
 import People from '../people';
 import Person from '../person';
+import TaskGraph from '../taskGraph';
+import PeopleGraph from '../peopleGraph';
 import { connect } from 'react-redux';
 import { reducer, actions } from '../../app/page';
 import { createDispatchToProps } from '../../modules/dispatchToProps';
 import { bindActionCreators, Dispatch } from 'redux';
-import TaskGraph from '../taskGraph';
 import { ModelState } from '../../modules/model';
 
 const ConnectedTask = connect(
@@ -67,6 +68,13 @@ const ConnectedPeople = connect(
 	(state: ReturnType<typeof reducer>) => state.people,
 	createDispatchToProps(actions.people)
 )(People);
+
+const ConnectedPeopleGraph = connect(
+	(state: ReturnType<typeof reducer>) => ({
+		subTasks: state.subTasks.items,
+		people: state.people.items
+	})
+)(PeopleGraph);
 
 interface IProps {
 	subTasks: ModelState<typeof import('../../app/subTaskList')['default']>;
@@ -130,6 +138,10 @@ class Page extends React.Component<IProps, IState> {
 					</div>
 					<ConnectedTaskGraph
 						onSelectTask={this._setTask}
+						onSelectSubTask={this._setSubTask}
+					/>
+					<ConnectedPeopleGraph
+						onSelectPerson={this._setPerson}
 						onSelectSubTask={this._setSubTask}
 					/>
 					<h2>Люди</h2>
