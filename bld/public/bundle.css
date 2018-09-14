@@ -1,0 +1,50 @@
+.src-components-taskList-styles__row {
+  cursor: pointer;
+}
+
+.src-components-subTaskList-styles__row {
+  cursor: pointer;
+}
+
+.src-components-people-styles__row {
+  cursor: pointer;
+}
+
+.src-components-taskGraph-styles__item {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  background-color: rgba(86, 61, 124, 0.15);
+  border: 1px solid rgba(86, 61, 124, 0.2);
+  cursor: pointer;
+}
+.src-components-taskGraph-styles__head {
+  text-align: center;
+}
+.src-components-taskGraph-styles__task {
+  padding-top: 0.5rem;
+  padding-bottom: 0.25rem;
+  background-color: #eee;
+  border: 1px solid #aaa;
+  cursor: pointer;
+}
+
+.src-components-peopleGraph-styles__item {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  background-color: rgba(86, 61, 124, 0.15);
+  border: 1px solid rgba(86, 61, 124, 0.2);
+  cursor: pointer;
+}
+.src-components-peopleGraph-styles__head {
+  text-align: center;
+}
+.src-components-peopleGraph-styles__task {
+  padding-top: 0.5rem;
+  padding-bottom: 0.25rem;
+  background-color: #eee;
+  border: 1px solid #aaa;
+  cursor: pointer;
+}
+
+
+/*# sourceMappingURL=bundle.css.map*/
