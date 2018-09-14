@@ -7,8 +7,10 @@ import cached from 'react-cached-callback';
 
 export type Props = {
 	subTasks: {[id: string]: ModelState<typeof import('../../app/subTask')['default']>};
+	tasks: {[id: string]: ModelState<typeof import('../../app/task')['default']>};
 	onSelectPerson?: (personId: string) => void;
 	onSelectSubTask?: (subTaskId: string) => void;
+	selectedSubTask?: string;
 	people: {[id: string]: ModelState<typeof import('../../app/person')['default']>};
 }
 
@@ -42,7 +44,9 @@ export default class PeopleGraph extends React.Component<Props> {
 						person={this.props.people[peopleId]}
 						subTasks={filter(this.props.subTasks, (subTask) => subTask.personId === peopleId)}
 						onSelectSubTask={this.props.onSelectSubTask}
+						selectedSubTask={this.props.selectedSubTask}
 						onSelectPerson={this._onSelectPerson(peopleId)}
+						tasks={this.props.tasks}
 					/>
 				))}
 			</>

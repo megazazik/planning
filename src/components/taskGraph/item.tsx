@@ -3,12 +3,14 @@ import { ModelState } from '../../modules/model';
 import { ISubTask } from '../../app/subTask';
 import styles from './styles.less';
 import cached from 'react-cached-callback';
+import cn from 'classnames';
 
 export type Props = {
 	subTasks: {[id: string]: ModelState<typeof import('../../app/subTask')['default']>};
 	task: ModelState<typeof import('../../app/task')['default']>;
 	onSelectTask?: () => void;
 	onSelectSubTask?: (subTaskId: string) => void;
+	selectedSubTask?: string;
 	people: {[id: string]: ModelState<typeof import('../../app/person')['default']>};
 }
 
@@ -67,13 +69,21 @@ export default class TaskGraphItem extends React.PureComponent<Props> {
 								{line.map((subTask) => {
 									const offset = subTask.start - prevEnd - 1;
 									prevEnd = subTask.start + subTask.duration - 1;
+									const subTaskId = this._getSubTaskId(subTask);
 									return (
 										<div
-											className={`col-${subTask.duration} offset-${offset} ${styles.item}`}
-											onClick={this._onSelectSubTask(this._getSubTaskId(subTask))}
-											key={`subTask${this._getSubTaskId(subTask)}`}
+											className={cn(
+												`col-${subTask.duration}`,
+												` offset-${offset}`,
+												styles.item,
+												{
+													[styles.selected]: this.props.selectedSubTask === subTaskId,
+												}
+											)}
+											onClick={this._onSelectSubTask(subTaskId)}
+											key={`subTask${subTaskId}`}
 										>
-											{subTask.id}: {(this.props.people[subTask.personId] || {name: undefined}).name}
+											{subTask.title}{subTask.id ? ` (${subTask.id})` : ''}: {(this.props.people[subTask.personId] || {name: undefined}).name}
 										</div>
 									);
 								})}

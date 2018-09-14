@@ -3,6 +3,7 @@ import Task from '../task';
 import TaskList from '../taskList';
 import SubTastList from '../subTaskList';
 import SubTask from '../subTask';
+import HiddenSubTask from '../hiddenSubTask';
 import People from '../people';
 import Person from '../person';
 import TaskGraph from '../taskGraph';
@@ -51,7 +52,7 @@ class Page extends React.Component<IProps, IState> {
 	render() {
 		return (
 			<>
-				<div className='container'>
+				<div className='container-fluid'>
 					<h1>Планирование спринта</h1>
 					<h2>Задачи</h2>
 					<div className='row my-3'>
@@ -74,10 +75,12 @@ class Page extends React.Component<IProps, IState> {
 					<TaskGraph
 						onSelectTask={this._setTask}
 						onSelectSubTask={this._setSubTask}
+						selectedSubTask={this.state.subTask}
 					/>
 					<PeopleGraph
 						onSelectPerson={this._setPerson}
 						onSelectSubTask={this._setSubTask}
+						selectedSubTask={this.state.subTask}
 					/>
 					<h2>Люди</h2>
 					<People
@@ -85,6 +88,7 @@ class Page extends React.Component<IProps, IState> {
 						selectedPerson={this.state.person}
 					/>
 					<Person person={this.state.person} />
+					<HiddenSubTask subTask={this.state.subTask}/>
 				</div>
 			</>
 		);

@@ -14,6 +14,8 @@ const model = build()
 		id: '',
 		title: '',
 		taskId: null,
+		duration: 1,
+		start: 1,
 	}))
 	.action({
 		setId: (task, action: IAction<string>) => ({...task, id: action.payload}),
