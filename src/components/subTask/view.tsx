@@ -76,17 +76,16 @@ export default class Task extends React.PureComponent<Props> {
 					</div>
 					<div className="col-4">
 						<select
-							value={this.props.personId || null}
+							value={this.props.personId || ''}
 							className="form-control"
 							onChange={this._onPersonChanged}
 							disabled={disabled}
 						>
-							<option value={null} selected={this.props.personId == null}>Выберите</option>
+							<option value=''>Выберите</option>
 							{Object.keys(this.props.people.items).map((personId) => (
 								<option
 									key={personId}
 									value={personId}
-									selected={this.props.personId == personId}
 								>
 									{this.props.people.items[personId].name}
 								</option>
