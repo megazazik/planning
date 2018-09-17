@@ -31,7 +31,10 @@ class Page extends React.Component<IProps, IState> {
 
 	private _setTask = (task: string) => {
 		this.setState((state) => {
-			if (state.subTask && this.props.subTasks.items[state.subTask].taskId !== task) {
+			if (state.subTask
+				&& this.props.subTasks.items[state.subTask]
+				&& this.props.subTasks.items[state.subTask].taskId !== task
+			) {
 				return {task, subTask: ''};
 			} else {
 				return {task, subTask: state.subTask};
