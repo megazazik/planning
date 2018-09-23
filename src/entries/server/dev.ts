@@ -1,6 +1,5 @@
 import pargeArgs from 'minimist';
 import express from 'express';
-import * as path from 'path';
 import webpack from 'webpack';
 import webpackConfig from '../../../config/webpack.dev.config';
 import proxy from 'express-http-proxy';
@@ -23,7 +22,9 @@ app.use(require("webpack-dev-middleware")(
 
 app.use(require("webpack-hot-middleware")(compiler));
 
-app.use('*', proxy('localhost:8000'));
+app.use('*', proxy('localhost:8000', {
+	proxyReqPathResolver: (req) => req.originalUrl
+}));
 
 app.listen(port, () => {
 	console.log(`Dev Server started on port ${port}.`);

@@ -56,7 +56,6 @@ function createServerEntry(name, entryPath) {
 		outputPath: 'bld/server'
 	});
 	serverEntry.target = "node";
-	/** @todo is it nesessary */
 	serverEntry.node = {
 		__dirname: false,
 		__filename: false
