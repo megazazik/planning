@@ -5,10 +5,10 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 const ConnectedSubTask = connect(
 	(state: ReturnType<typeof reducer>, props: {subTask: string}) => ({
-		...state.subTasks.items[props.subTask] || {title: undefined, id: undefined, taskId: undefined},
-		people: state.people
+		...state.sprint.subTasks.items[props.subTask] || {title: undefined, id: undefined, taskId: undefined},
+		people: state.sprint.people
 	}),
-	(dispatch: Dispatch, props: {subTask: string}) => bindActionCreators(actions.subTasks.item(props.subTask), dispatch)
+	(dispatch: Dispatch, props: {subTask: string}) => bindActionCreators(actions.sprint.subTasks.item(props.subTask), dispatch)
 )(SubTask);
 
 export default ConnectedSubTask;

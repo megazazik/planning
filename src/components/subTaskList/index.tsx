@@ -5,19 +5,19 @@ import SubTaskList from './view';
 
 const ConnecteSubTastList = connect(
 	(state: ReturnType<typeof reducer>, props: {taskId: string}) => ({
-		...state.subTasks,
-		items: Object.keys(state.subTasks.items).reduce(
-			(newTasks, subTaskId) => state.subTasks.items[subTaskId].taskId !== props.taskId
+		...state.sprint.subTasks,
+		items: Object.keys(state.sprint.subTasks.items).reduce(
+			(newTasks, subTaskId) => state.sprint.subTasks.items[subTaskId].taskId !== props.taskId
 				? newTasks
 				: {
 					...newTasks,
-					[subTaskId]: state.subTasks.items[subTaskId],
+					[subTaskId]: state.sprint.subTasks.items[subTaskId],
 				},
 			{}
 		),
-		people: state.people
+		people: state.sprint.people
 	}),
-	createDispatchToProps(actions.subTasks)
+	createDispatchToProps(actions.sprint.subTasks)
 )(SubTaskList);
 
 export default ConnecteSubTastList;

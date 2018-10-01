@@ -4,8 +4,8 @@ import { createDispatchToProps } from '../../modules/dispatchToProps';
 import TaskList from './view';
 
 const ConnectedTaskList = connect(
-	(state: ReturnType<typeof reducer>) => state.tasks,
-	createDispatchToProps(actions.tasks)
+	(state: ReturnType<typeof reducer>) => state.sprint.tasks,
+	createDispatchToProps(actions.sprint.tasks)
 )(TaskList);
 
 export default ConnectedTaskList;

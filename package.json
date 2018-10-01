@@ -23,9 +23,10 @@
 	"dependencies": {
 		"@types/react-redux": "^6.0.6",
 		"@types/redux": "^3.6.0",
+		"body-parser": "^1.18.3",
 		"classnames": "^2.2.6",
 		"cross-env": "^5.1.1",
-		"encaps": "^0.3.2",
+		"encaps": "^0.3.3",
 		"express": "^4.16.3",
 		"minimist": "^1.2.0",
 		"morgan": "^1.9.1",
@@ -34,8 +35,7 @@
 		"react-cached-callback": "^1.0.1",
 		"react-dom": "^16.4.1",
 		"react-redux": "^5.0.7",
-		"redux": "^4.0.0",
-		"redux-localstorage": "^0.4.1"
+		"redux": "^4.0.0"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.0.0-beta.54",

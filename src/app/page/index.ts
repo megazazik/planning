@@ -1,17 +1,16 @@
 import { build, IAction } from 'encaps';
-import tasks from '../taskList';
-import subTasksLists from '../subTaskList';
-import people from '../people';
+import sprint from '../sprint';
+import sprints from '../sprints';
+import { ModelState } from '../../modules/model';
+
+export const SPRINTS_KEY = 'sprints';
 
 export const { reducer, actions } = build()
-	.child('tasks', tasks)
-	.child('subTasks', subTasksLists)
-	.child('people', people)
-	.subActions({
-		tasks: {
-			remove: (payload, actions) => actions.subTasks.removeByTask(payload)
-		},
-		people: {
-			remove: (payload, actions) => actions.subTasks.cleanPerson(payload)
-		}
+	.child('sprint', sprint)
+	.child(SPRINTS_KEY, sprints)
+	.action({
+		replace: (state, action: IAction<ModelState<typeof sprint>>) => ({
+			...state,
+			sprint: action.payload || sprint.reducer()
+		})
 	});

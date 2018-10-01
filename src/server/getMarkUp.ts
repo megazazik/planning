@@ -1,6 +1,3 @@
-import * as React from 'react';
-import { renderToString } from 'react-dom/server';
-
 export default (data): string => {
 	return `
 <!doctype html>

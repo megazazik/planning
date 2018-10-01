@@ -4,9 +4,9 @@ import PeopleGraph from './view';
 
 const ConnectedPeopleGraph = connect(
 	(state: ReturnType<typeof reducer>) => ({
-		subTasks: state.subTasks.items,
-		people: state.people.items,
-		tasks: state.tasks.items
+		subTasks: state.sprint.subTasks.items,
+		people: state.sprint.people.items,
+		tasks: state.sprint.tasks.items
 	})
 )(PeopleGraph);
 

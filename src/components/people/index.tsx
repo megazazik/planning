@@ -4,8 +4,8 @@ import { reducer, actions } from '../../app/page';
 import People from './view';
 
 const ConnectedPeople = connect(
-	(state: ReturnType<typeof reducer>) => state.people,
-	createDispatchToProps(actions.people)
+	(state: ReturnType<typeof reducer>) => state.sprint.people,
+	createDispatchToProps(actions.sprint.people)
 )(People);
 
 export default ConnectedPeople;

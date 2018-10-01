@@ -8,12 +8,14 @@ import People from '../people';
 import Person from '../person';
 import TaskGraph from '../taskGraph';
 import PeopleGraph from '../peopleGraph';
+import Sprints from '../sprints';
 import { connect } from 'react-redux';
 import { reducer } from '../../app/page';
 import { ModelState } from '../../modules/model';
 
 interface IProps {
 	subTasks: ModelState<typeof import('../../app/subTaskList')['default']>;
+	sprints: ModelState<typeof import('../../app/sprints')['default']>;
 }
 
 interface IState {
@@ -57,41 +59,49 @@ class Page extends React.Component<IProps, IState> {
 			<>
 				<div className='container-fluid'>
 					<h1>Планирование спринта</h1>
-					<h2>Задачи</h2>
-					<div className='row my-3'>
-						<div className='col col-md-6'>
-							<TaskList
-								onTaskSelect={this._setTask}
-								selectedTask={this.state.task}
+					<Sprints />
+					{!!this.props.sprints.loading && (
+						<h2>Загрузка...</h2>
+					)}
+					{!this.props.sprints.loading && !!this.props.sprints.current && (
+						<>
+							<h2>Задачи</h2>
+							<div className='row my-3'>
+								<div className='col col-md-6'>
+									<TaskList
+										onTaskSelect={this._setTask}
+										selectedTask={this.state.task}
+									/>
+								</div>
+								<div className='col col-md-6'>
+									<Task task={this.state.task}/>
+									<SubTastList
+										onSubTaskSelect={this._setSubTask}
+										selectedSubTaskId={this.state.subTask}
+										taskId={this.state.task}
+									/>
+									<SubTask subTask={this.state.subTask}/>
+								</div>
+							</div>
+							<TaskGraph
+								onSelectTask={this._setTask}
+								onSelectSubTask={this._setSubTask}
+								selectedSubTask={this.state.subTask}
 							/>
-						</div>
-						<div className='col col-md-6'>
-							<Task task={this.state.task}/>
-							<SubTastList
-								onSubTaskSelect={this._setSubTask}
-								selectedSubTaskId={this.state.subTask}
-								taskId={this.state.task}
+							<PeopleGraph
+								onSelectPerson={this._setPerson}
+								onSelectSubTask={this._setSubTask}
+								selectedSubTask={this.state.subTask}
 							/>
-							<SubTask subTask={this.state.subTask}/>
-						</div>
-					</div>
-					<TaskGraph
-						onSelectTask={this._setTask}
-						onSelectSubTask={this._setSubTask}
-						selectedSubTask={this.state.subTask}
-					/>
-					<PeopleGraph
-						onSelectPerson={this._setPerson}
-						onSelectSubTask={this._setSubTask}
-						selectedSubTask={this.state.subTask}
-					/>
-					<h2>Люди</h2>
-					<People
-						onPeopleSelect={this._setPerson}
-						selectedPerson={this.state.person}
-					/>
-					<Person person={this.state.person} />
-					<HiddenSubTask subTask={this.state.subTask}/>
+							<h2>Люди</h2>
+							<People
+								onPeopleSelect={this._setPerson}
+								selectedPerson={this.state.person}
+							/>
+							<Person person={this.state.person} />
+							<HiddenSubTask subTask={this.state.subTask}/>
+						</>
+					)}
 				</div>
 			</>
 		);
@@ -99,5 +109,5 @@ class Page extends React.Component<IProps, IState> {
 }
 
 export default connect(
-	(state: ReturnType<typeof reducer>) => ({subTasks: state.subTasks})
+	(state: ReturnType<typeof reducer>) => ({subTasks: state.sprint.subTasks, sprints: state.sprints})
 )(Page)
