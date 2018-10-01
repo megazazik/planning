@@ -42,19 +42,20 @@ export default function sprintsMiddleware<S>(
 				fetch(
 					PLANNING_API_PATH + '?key=' + sprintsAction.payload,
 					{method: "DELETE"}
-				).then((resp) => {
-					store.dispatch(actions.replace(null));
-					store.dispatch(actions.sprints.add());
-					if (resp.status === 200) {
-						// если пришел, то установить store
-						resp.json().then((data) => {
-							store.dispatch(actions.replace(data));
-						});
-					} else {
-						// если нет, создать пустой
-						store.dispatch(actions.replace(null));
-					}
-				});
+				);
+				store.dispatch(actions.replace(null));
+				// .then((resp) => {
+				// 	store.dispatch(actions.replace(null));
+				// 	if (resp.status === 200) {
+				// 		// если пришел, то установить store
+				// 		resp.json().then((data) => {
+				// 			store.dispatch(actions.replace(data));
+				// 		});
+				// 	} else {
+				// 		// если нет, создать пустой
+				// 		store.dispatch(actions.replace(null));
+				// 	}
+				// });
 				break;	
 		}
 		

@@ -268,7 +268,7 @@ var model = Object(encaps__WEBPACK_IMPORTED_MODULE_0__["build"])()
 }); })
     .action((_a = {},
     _a[ADD] = function (state, action) { return (__assign({}, state, { items: state.items.concat([action.payload]) })); },
-    _a[REMOVE] = function (state, action) { return (__assign({}, state, { items: state.items.filter(function (planning) { return (planning !== action.payload); }) })); },
+    _a[REMOVE] = function (state, action) { return (__assign({}, state, { items: state.items.filter(function (planning) { return (planning !== action.payload); }), current: null })); },
     _a[SET_CURRENT] = function (state, action) { return (__assign({}, state, { current: action.payload || null })); },
     _a[LOADED] = function (state, action) { return (__assign({}, state, { loading: action.payload })); },
     _a));

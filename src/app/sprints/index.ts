@@ -24,7 +24,8 @@ const model = build()
 		}),
 		[REMOVE]: (state, action: IAction<string>) => ({
 			...state,
-			items: state.items.filter((planning) => (planning !== action.payload))
+			items: state.items.filter((planning) => (planning !== action.payload)),
+			current: null,
 		}),
 		[SET_CURRENT]: (state, action: IAction<string>) => ({
 			...state,
