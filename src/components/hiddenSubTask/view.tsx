@@ -34,7 +34,27 @@ export default class Task extends React.PureComponent<Props, IState> {
 		this.props.setPerson(event.target.value);
 	}
 
-	private _onOpenClick = () => this.setState((state: IState) => ({open: !state.open}))
+	private _onOpenClick = () => this.setState((state: IState) => ({open: !state.open}));
+
+	private _onStartIncrease = () => {
+		this.props.setStart((this.props.start || 1) + 1);
+	}
+
+	private _onStartDecrease = () => {
+		if (this.props.start && this.props.start > 1) {
+			this.props.setStart(this.props.start - 1);
+		}
+	}
+
+	private _onDurationIncrease = () => {
+		this.props.setDuration((this.props.duration || 1) + 1);
+	}
+
+	private _onDurationDecrease = () => {
+		if (this.props.duration && this.props.duration > 1) {
+			this.props.setDuration(this.props.duration - 1);
+		}
+	}
 
 	render() {
 		const disabled = this.props.id === undefined;
@@ -56,24 +76,68 @@ export default class Task extends React.PureComponent<Props, IState> {
 								/>
 							</div>
 							<div className="col-4">
-								<input
-									type="text"
-									className="form-control"
-									value={this.props.start || ''}
-									onChange={this._onStartChanged}
-									disabled={disabled}
-									placeholder="Начало"
-								/>
+								<div className="input-group">
+									<div className="input-group-prepend">
+										<button
+											className="btn btn-outline-secondary"
+											type="button"
+											disabled={disabled || this.props.start === 1}
+											onClick={this._onStartDecrease}
+										>
+											-
+										</button>
+									</div>
+									<input
+										type="text"
+										className="form-control"
+										value={this.props.start || ''}
+										onChange={this._onStartChanged}
+										disabled={disabled}
+										placeholder="Начало"
+									/>
+									<div className="input-group-append">
+										<button
+											className="btn btn-outline-secondary"
+											type="button"
+											disabled={disabled}
+											onClick={this._onStartIncrease}
+										>
+											+
+										</button>
+									</div>
+								</div>
 							</div>
 							<div className="col-4">
-								<input
-									type="text"
-									className="form-control"
-									value={this.props.duration || ''}
-									onChange={this._onDurationChanged}
-									disabled={disabled}
-									placeholder="Продолжительность"
-								/>
+								<div className="input-group">
+									<div className="input-group-prepend">
+										<button
+											className="btn btn-outline-secondary"
+											type="button"
+											disabled={disabled || this.props.duration === 1}
+											onClick={this._onDurationDecrease}
+										>
+											-
+										</button>
+									</div>
+									<input
+										type="text"
+										className="form-control"
+										value={this.props.duration || ''}
+										onChange={this._onDurationChanged}
+										disabled={disabled}
+										placeholder="Продолжительность"
+									/>
+									<div className="input-group-append">
+										<button
+											className="btn btn-outline-secondary"
+											type="button"
+											disabled={disabled}
+											onClick={this._onDurationIncrease}
+										>
+											+
+										</button>
+									</div>
+								</div>
 							</div>
 						</div>
 						<div className="form-group row">

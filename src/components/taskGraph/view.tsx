@@ -25,24 +25,48 @@ export default class TaskGraph extends React.Component<Props> {
 		return () => this.props.onSelectTask(taskId);
 	}
 
+	private _getTasks() {
+		/** @todo оптимизировать получение подзадач */
+		return Object.entries(this.props.tasks)
+			.sort(([task1Id], [task2Id]) => {
+				const task1Interval = this._getSubTaskStartEnd(task1Id);
+				const task2Interval = this._getSubTaskStartEnd(task2Id);
+
+				if (task1Interval.start === task2Interval.start) {
+					return task1Interval.end - task2Interval.end;
+				} else {
+					return task1Interval.start - task2Interval.start;
+				}
+			});
+	}
+
+	private _getSubTaskStartEnd(taskId: string) {
+		return Object.values(this._getSubtasksByTaskId(taskId)).reduce(
+			(prevValues, subTask) => ({
+				start: subTask.start < prevValues.start ? subTask.start : prevValues.start, 
+				end: subTask.start + subTask.duration > prevValues.end ? subTask.start + subTask.duration : prevValues.end,
+			}),
+			{start: Infinity, end: 0},
+		)
+	}
+
+	private _getSubtasksByTaskId(taskId: string) {
+		return filter(this.props.subTasks, (subTask) => subTask.taskId === taskId)
+	}
+
 	render () {
 		return (
 			<>
 				<div className="row align-items-center h4 mb-4">
-					<div className="col-md-1">Задача</div>
-					<div className="col-md-11">
-						<div className="row">
-							{Array.apply(null, {length: 12}).map(Number.call, Number).map((index) => (
-								<div key={`headCol${index}`} className={`col-1 ${styles.head}`}>{index + 1}</div>
-							))}
-						</div>
-					</div>
+					{Array.apply(null, {length: 12}).map(Number.call, Number).map((index) => (
+						<div key={`headCol${index}`} className={`col-1 ${styles.head}`}>{index + 1}</div>
+					))}
 				</div>
-				{Object.keys(this.props.tasks).map((taskId) => (
+				{this._getTasks().map(([taskId, task]) => (
 					<Item
 						key={`taskGraph_${taskId}`}
-						task={this.props.tasks[taskId]}
-						subTasks={filter(this.props.subTasks, (subTask) => subTask.taskId === taskId)}
+						task={task}
+						subTasks={this._getSubtasksByTaskId(taskId)}
 						onSelectSubTask={this.props.onSelectSubTask}
 						onSelectTask={this._onSelectTask(taskId)}
 						selectedSubTask={this.props.selectedSubTask}

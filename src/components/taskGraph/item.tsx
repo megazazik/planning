@@ -56,42 +56,48 @@ export default class TaskGraphItem extends React.PureComponent<Props> {
 		}
 
 		return (
-			<div
-				className={`row align-items-center mb-3 ${styles.task}`}
-				onClick={this.props.onSelectTask}
-			>
-				<div className="col-md-1">{this.props.task.id}</div>
-				<div className="col-md-11">
-					{this._getLines().map((line, index) => {
-						let prevEnd = 0;
-						return (
-							<div className="row mb-1" key={`line_${index}`}>
-								{line.map((subTask) => {
-									const offset = subTask.start - prevEnd - 1;
-									prevEnd = subTask.start + subTask.duration - 1;
-									const subTaskId = this._getSubTaskId(subTask);
-									return (
-										<div
-											className={cn(
-												`col-${subTask.duration}`,
-												` offset-${offset}`,
-												styles.item,
-												{
-													[styles.selected]: this.props.selectedSubTask === subTaskId,
-												}
-											)}
-											onClick={this._onSelectSubTask(subTaskId)}
-											key={`subTask${subTaskId}`}
-										>
-											{subTask.title}{subTask.id ? ` (${subTask.id})` : ''}: {(this.props.people[subTask.personId] || {name: undefined}).name}
-										</div>
-									);
-								})}
-							</div>
-						);
-					})}
+			<>
+				<div className='row'>
+					<div className='col-12'>
+						<h5>{this.props.task.id} - {this.props.task.title}</h5>
+					</div>
 				</div>
-			</div>
+				<div
+					className={`row align-items-center mb-3 ${styles.task}`}
+					onClick={this.props.onSelectTask}
+				>
+					<div className="col-md-12">
+						{this._getLines().map((line, index) => {
+							let prevEnd = 0;
+							return (
+								<div className="row mb-1" key={`line_${index}`}>
+									{line.map((subTask) => {
+										const offset = subTask.start - prevEnd - 1;
+										prevEnd = subTask.start + subTask.duration - 1;
+										const subTaskId = this._getSubTaskId(subTask);
+										return (
+											<div
+												className={cn(
+													`col-${subTask.duration}`,
+													` offset-${offset}`,
+													styles.item,
+													{
+														[styles.selected]: this.props.selectedSubTask === subTaskId,
+													}
+												)}
+												onClick={this._onSelectSubTask(subTaskId)}
+												key={`subTask${subTaskId}`}
+											>
+												{subTask.title}{subTask.id ? ` (${subTask.id})` : ''}: {(this.props.people[subTask.personId] || {name: undefined}).name}
+											</div>
+										);
+									})}
+								</div>
+							);
+						})}
+					</div>
+				</div>
+			</>
 		);
 	}
 }
