@@ -26,7 +26,7 @@
 		"body-parser": "^1.18.3",
 		"classnames": "^2.2.6",
 		"cross-env": "^5.1.1",
-		"encaps": "^0.3.3",
+		"encaps": "^0.4.1",
 		"express": "^4.16.3",
 		"minimist": "^1.2.0",
 		"morgan": "^1.9.1",
@@ -76,7 +76,7 @@
 		"webpack": "^4.16.1",
 		"webpack-cli": "^3.1.0",
 		"webpack-dev-middleware": "^1.12.2",
-		"webpack-dev-server": "^2.9.4",
+		"webpack-dev-server": "^3.1.14",
 		"webpack-hot-middleware": "^2.22.3",
 		"webpack-node-externals": "^1.6.0"
 	},
